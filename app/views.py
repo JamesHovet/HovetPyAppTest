@@ -49,8 +49,16 @@ def about(request):
         })
     )
 
-def test(request):
-    """Renders TestPage"""
-    return HttpResponse("Hello, world. You're at the polls index.")
-    
 
+def test(request):
+    """Renders the about page."""
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/test.html',
+        context_instance = RequestContext(request,
+        {
+            'title':'Test2',
+            'message':'Your application description page.',
+            'year':datetime.now().year,
+        }))
