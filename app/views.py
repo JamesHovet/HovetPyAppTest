@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
+from django.http import HttpResponse
 
 def home(request):
     """Renders the home page."""
@@ -51,5 +52,5 @@ def about(request):
 def test(request):
     """Renders TestPage"""
     return HttpResponse("Hello, world. You're at the polls index.")
-    )
+    
 
