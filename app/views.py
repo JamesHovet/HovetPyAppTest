@@ -47,3 +47,18 @@ def about(request):
             'year':datetime.now().year,
         })
     )
+
+def test(request):
+    """Renders TestPage"""
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/about.html',
+        context_instance = RequestContext(request,
+                                          {
+                                              'title':'Test',
+                                              'message':'thisIsATestPage',
+                                              'year':datetime.now().year,
+                                          })
+    )
+
