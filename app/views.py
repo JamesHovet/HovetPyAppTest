@@ -55,7 +55,7 @@ def test(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/test.html',
+        'app/brackets.html',
         context_instance = RequestContext(request,
         {
             'title':'Test2',
