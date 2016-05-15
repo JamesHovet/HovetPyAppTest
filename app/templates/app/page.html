@@ -1,14 +1,14 @@
 {% extends "app/newLayout.html" %}
 
-{% blockcontent %}
+{% block content %}
 
-<h1>THIS IS THE HEADER</h1>
+<h1 tag="HEADER">THIS IS THE HEADER</h1>
 
 <ol>
-    <li>OPTION1</li>
-    <li>OPTION2</li>
-    <li>OPTION3</li>
-    <li>OPTION4</li>
+    <li>OPTION1 - {{ op1 }}</li>
+    <li>OPTION2 - {{ op2 }} </li>
+    <li>OPTION3 - {{ op3 }}</li>
+    <li>OPTION4 - {{ op4 }}</li>
 </ol>
 <button>SUBMIT</button>
 

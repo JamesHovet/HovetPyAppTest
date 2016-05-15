@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 from django.http import HttpResponse
+import getOptions
 
 def home(request):
     """Renders the home page."""
@@ -55,10 +56,13 @@ def test(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/brackets.html',
+        'app/page.html',
         context_instance = RequestContext(request,
         {
             'title':'Test2',
-            'message':'Your application description page.',
             'year':datetime.now().year,
+            'op1': getOptions.returnRandomInNumbers(),
+            'op2': getOptions.returnRandomInNumbers(),
+            'op3': getOptions.returnRandomInNumbers(),
+            'op4': getOptions.returnRandomInNumbers()
         }))
