@@ -6,6 +6,8 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
+import app.models
+
 from django.http import HttpResponse
 import getOptions
 
@@ -53,6 +55,9 @@ def about(request):
 
 def test(request):
     """Renders the about page."""
+
+    imgNum = getOptions.n()
+
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -62,10 +67,10 @@ def test(request):
         context_instance = RequestContext(request,
         {
             'title':'Test2',
-            'imgNum':"3605273",
+            'imgNum': imgNum,
             'year':datetime.now().year,
             'op1': getOptions.returnRandomInNumbers(),
             'op2': getOptions.returnRandomInNumbers(),
             'op3': getOptions.returnRandomInNumbers(),
-            'op4': getOptions.returnRandomInNumbers()
+            'op4': app.models.Person.objects.get(imgNumber=imgNum)
         }))
