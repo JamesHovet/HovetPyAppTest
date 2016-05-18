@@ -14,16 +14,33 @@
     <img src="{% static "app/img/"|add:imgNum|add:".jpg" %}">
     <br>
     <div id="ANSWERS">
-    <input type="radio" name="answer" value="op1"> {{op1}}<br><br>
-    <input type="radio" name="answer" value="op2"> {{op2}}<br><br>
-    <input type="radio" name="answer" value="op3"> {{op3}}<br><br>
-    <input type="radio" name="answer" value="op4"> {{op4}}<br><br>
+
+        <form action="/test/" method="post">{% csrf_token %}
+    <label><input type="radio" name="answer" value="op1"> {{op1}}</label><br><br>
+    <label><input type="radio" name="answer" value="op2"> {{op2}}</label><br><br>
+    <label><input type="radio" name="answer" value="op3"> {{op3}}</label><br><br>
+    <label><input type="radio" name="answer" value="op4"> {{op4}}</label><br><br>
     </div>
     
     <br>
 
-    <button>SUBMIT</button>
-    
+    <button type="submit">SUBMIT</button>
+    <script>
+
+            $(function() {
+        $("form input").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                $('button[type=submit] .default').click();
+                return false;
+            } else {
+                return true;
+            }
+        });
+    });
+
+    </script>
+        </form>
+
 </body>
 
 {% endblock %}
