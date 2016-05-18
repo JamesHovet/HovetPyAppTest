@@ -30,7 +30,7 @@ class Person(models.Model):
     numIncorrect = models.IntegerField()
 
     def __str__(self):
-        return self.name + ' , ' + str(self.imgNumber)
+        return self.name
 
 d3 = {'2899829': "Ms. Sashni-ColeMatthews'16",
  '2899844': 'Emma "Emma" Mary Ann Rimmer\'16',

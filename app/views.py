@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 import app.models
+import random
 
 from django.http import HttpResponse
 import getOptions
@@ -58,6 +59,10 @@ def test(request):
 
     imgNum = getOptions.n()
 
+    op = [app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n())]
+
+    op[random.randrange(0,4)] = app.models.Person.objects.get(imgNumber=imgNum)
+
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -69,8 +74,8 @@ def test(request):
             'title':'Test2',
             'imgNum': imgNum,
             'year':datetime.now().year,
-            'op1': getOptions.returnRandomInNumbers(),
-            'op2': getOptions.returnRandomInNumbers(),
-            'op3': getOptions.returnRandomInNumbers(),
-            'op4': app.models.Person.objects.get(imgNumber=imgNum)
+            'op1': op[0],
+            'op2': op[1],
+            'op3': op[2],
+            'op4': op[3]
         }))
