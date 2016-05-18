@@ -56,10 +56,13 @@ def test(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/page.html',
+        'app/question.html',
+
+
         context_instance = RequestContext(request,
         {
             'title':'Test2',
+            'imgNum':"3605273",
             'year':datetime.now().year,
             'op1': getOptions.returnRandomInNumbers(),
             'op2': getOptions.returnRandomInNumbers(),
