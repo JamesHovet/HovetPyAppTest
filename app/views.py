@@ -57,18 +57,12 @@ def about(request):
 def test(request):
     """Renders the about page."""
 
-    imgNum = getOptions.n()
+    answer = getOptions.getRandomRecord()
 
+    op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(4)]
 
+    op[random.randrange(0,4)] = answer
 
-    op = [app.models.Person.objects.get(imgNumber=getOptions.n()),
-          app.models.Person.objects.get(imgNumber=getOptions.n()),
-          app.models.Person.objects.get(imgNumber=getOptions.n()),
-          app.models.Person.objects.get(imgNumber=getOptions.n())]
-
-    corr = random.randrange(0,4)
-
-    op[corr] = app.models.Person.objects.get(imgNumber=imgNum)
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -80,11 +74,11 @@ def test(request):
         context_instance = RequestContext(request,
         {
             'title':'Quiz',
-            'imgNum': imgNum,
+            'imgNum': str(answer.imgNumber),
             'year':datetime.now().year,
-            'op1': op[0].name,
-            'op2': op[1].name,
-            'op3': op[2].name,
-            'op4': op[3].name,
+            'op1': op[0].name[:-3],
+            'op2': op[1].name[:-3],
+            'op3': op[2].name[:-3],
+            'op4': op[3].name[:-3],
 
         }))

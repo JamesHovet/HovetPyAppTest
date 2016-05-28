@@ -29,6 +29,7 @@ class Person(models.Model):
     numCorrect = models.IntegerField()
     numIncorrect = models.IntegerField()
     form = models.IntegerField(default=0)
+    isMale = models.IntegerField(default=1)
 
     def __str__(self):
         return str(self.name + str(self.form))
