@@ -28,9 +28,10 @@ class Person(models.Model):
     name = models.CharField(max_length=200)
     numCorrect = models.IntegerField()
     numIncorrect = models.IntegerField()
+    form = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return str(self.name + str(self.form))
 
 d3 = {'2899829': "Ms. Sashni-ColeMatthews'16",
  '2899844': 'Emma "Emma" Mary Ann Rimmer\'16',
@@ -364,3 +365,4 @@ d3 = {'2899829': "Ms. Sashni-ColeMatthews'16",
  '3605273': 'Jonathan "JJ"Cheng Jr. \'18',
  '3608158': 'Vladimir "Vlad"Malashenko\'19',
  '3608174': "MacyLipkin'18"}
+

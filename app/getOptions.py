@@ -1,5 +1,9 @@
 import random
 
+import app.models
+
+
+
 numbers = [i for i in range(100)]
 
 alpha = 'abcdefghijklmnopqrstuvwxyz'
@@ -20,3 +24,6 @@ def returnRandomInImgNumbers():
 
 def n():
     return imgNumbers[random.randrange(0,len(imgNumbers))][:-4]
+
+def getRandomRecord():
+    return app.models.Person.objects.order_by('?').first()

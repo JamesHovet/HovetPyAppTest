@@ -59,9 +59,16 @@ def test(request):
 
     imgNum = getOptions.n()
 
-    op = [app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n()),app.models.Person.objects.get(imgNumber=getOptions.n())]
 
-    op[random.randrange(0,4)] = app.models.Person.objects.get(imgNumber=imgNum)
+
+    op = [app.models.Person.objects.get(imgNumber=getOptions.n()),
+          app.models.Person.objects.get(imgNumber=getOptions.n()),
+          app.models.Person.objects.get(imgNumber=getOptions.n()),
+          app.models.Person.objects.get(imgNumber=getOptions.n())]
+
+    corr = random.randrange(0,4)
+
+    op[corr] = app.models.Person.objects.get(imgNumber=imgNum)
 
     assert isinstance(request, HttpRequest)
     return render(
@@ -69,13 +76,15 @@ def test(request):
         'app/question.html',
 
 
+
         context_instance = RequestContext(request,
         {
-            'title':'Test2',
+            'title':'Quiz',
             'imgNum': imgNum,
             'year':datetime.now().year,
-            'op1': op[0],
-            'op2': op[1],
-            'op3': op[2],
-            'op4': op[3]
+            'op1': op[0].name,
+            'op2': op[1].name,
+            'op3': op[2].name,
+            'op4': op[3].name,
+
         }))
