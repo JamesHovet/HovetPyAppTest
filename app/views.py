@@ -55,13 +55,21 @@ def about(request):
 
 
 def test(request):
-    """Renders the about page."""
+    """Renders the question page."""
+
+    done = False
 
     answer = getOptions.getRandomRecord()
 
     op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(4)]
 
-    op[random.randrange(0,4)] = answer
+    for i in op:
+        if answer == i:
+            i = answer
+            done = True
+
+    if done == False:
+        op[random.randrange(0,4)] = answer
 
 
     assert isinstance(request, HttpRequest)
