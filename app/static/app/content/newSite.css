@@ -1,0 +1,40 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+
+.resultsDiv p {
+    display: inline;
+}
+
+.green {
+    color: #17d402;
+}
+
+.orange {
+    color: #e9b21c;
+}
+
+.red {
+    color: #d9221c;
+}
+
+.resultsDiv {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 50%;
+    height: 400px;
+}
+
+footer {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}

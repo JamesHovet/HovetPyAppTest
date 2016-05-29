@@ -1,0 +1,24 @@
+{% extends "app/newlayout.html" %}
+
+<head>
+    <title>{{title}}</title>
+</head>
+
+{% block content %}
+<div class="resultsDiv">
+
+    <h1>Results:</h1>
+    <br>
+    <h3>Correct Responces: <p>{{numCorrect}}</p></h3>
+    <h3>Total Responces: <p>{{numAnswered}}</p></h3>
+    <br>
+    <h3>Final Score: <p class="{{percentColor}}">{{percentScore}}%</p></h3>
+    <br>
+    <h3><a href="/test/">Take the test again</a></h3>
+
+</div>
+
+<footer>
+    <h5>Version: <small>{{version}}</small></h5>
+</footer>
+{% endblock %}

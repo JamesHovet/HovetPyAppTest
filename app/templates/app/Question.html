@@ -1,3 +1,5 @@
+
+
 <head>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/question.css' %}" />
@@ -9,30 +11,35 @@
 
 <body>
 
-    <h2>Who is this?</h2>
-    <h3>test: {{test}}</h3>
-    <h4>corr: {{corr}}</h4>
-    <h4>correct: {{correct}}</h4>
+    <h2>previousCorrectDebug: {{previousCorrectDebug}}</h2>
+    <h2>previousAnswerDebug: {{previousAnswerDebug}}</h2>
+    <h2>previousPersonId (DEBUG): {{previousPersonId}}</h2>
+    <h2>currentCorrectImgId (DEBUG): {{correctImgId}}</h2>
+
+    <h1>Who Is This?</h1>
 
     <img src="{% static "app/img/"|add:imgNum|add:".jpg" %}">
     <br>
-    <div id="ANSWERS">
+    <form action="/test/?q={{ numQuestion |add:1 }}" method="post">{% csrf_token %}
+        <div id="ANSWERS">
 
-        <form action="/test/?q={{ numQuestion |add:1 }}" method="post">{% csrf_token %}
-    <label><input type="radio" id="choice1" name="answer" value="op1"> {{op1}}</label><br><br>
-    <label><input type="radio" id="choice2" name="answer" value="op2"> {{op2}}</label><br><br>
-    <label><input type="radio" id="choice3" name="answer" value="op3"> {{op3}}</label><br><br>
-    <label><input type="radio" id="choice4" name="answer" value="op4"> {{op4}}</label><br><br>
 
-            <input hidden="true" id="corr" name="correctChoice" value="{{corr}}">
+            <label><input type="radio" id="choice1" name="answer" value="op1"> {{op1}}</label><br><br>
+            <label><input type="radio" id="choice2" name="answer" value="op2"> {{op2}}</label><br><br>
+            <label><input type="radio" id="choice3" name="answer" value="op3"> {{op3}}</label><br><br>
+            <label><input type="radio" id="choice4" name="answer" value="op4"> {{op4}}</label><br><br>
+            <label><input type="radio" id="choice5" name="answer" value="op5"> {{op5}}</label><br><br>
 
-    </div>
+        </div>
     
-    <br>
+        <br>
 
-    <button type="submit">SUBMIT</button>
+        <button type="submit">SUBMIT</button>
 
-        </form>
+        <input type="hidden" name="correctOption" value="{{correctOption}}">
+        <input type="hidden" name="correctImgId" value="{{correctImgId}}">
+
+    </form>
 
 </body>
 
