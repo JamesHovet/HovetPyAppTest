@@ -82,7 +82,7 @@ def test(request):
 
     answer = getOptions.getRandomRecord()
 
-    op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(10)]
+    op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(8)]
 
     if answer.form != "20":
         op = list(set(op))
