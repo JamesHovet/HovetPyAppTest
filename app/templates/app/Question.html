@@ -10,11 +10,16 @@
 {% block content %}
 
 <body>
-
+    <!--
     <h2>previousCorrectDebug: {{previousCorrectDebug}}</h2>
     <h2>previousAnswerDebug: {{previousAnswerDebug}}</h2>
     <h2>previousPersonId (DEBUG): {{previousPersonId}}</h2>
     <h2>currentCorrectImgId (DEBUG): {{correctImgId}}</h2>
+    <h2>CurrentCorrectOption (DEBUG): {{correctOption}}</h2>
+    -->
+    <br>
+
+    <h2>Question {{numQuestion}} of 25</h2>
 
     <h1>Who Is This?</h1>
 
@@ -42,5 +47,23 @@
     </form>
 
 </body>
+
+<style>
+
+    footer {
+        position:absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+    }
+</style>
+
+<footer>
+    <h5>Version: <small>{{version}}</small></h5>
+</footer>
 
 {% endblock %}

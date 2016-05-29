@@ -78,8 +78,7 @@ def getColor(n):
 
 
 def test(request):
-    """Renders the question page."""
-
+    """Renders the question page"""
 
     answer = getOptions.getRandomRecord()
 
@@ -87,64 +86,100 @@ def test(request):
 
     op = list(set(op))
 
+    if answer in op:
+        op.remove(answer)
+
+
+
     correctOption = random.randrange(0, 5)
 
     op[correctOption] = answer
 
+    """CHECK CORRECT"""
+
+    previousCorrect = request.POST.get("correctOption", default=None)
+    previousAnswer = request.POST.get("answer", default=None)
+
     assert isinstance(request, HttpRequest)
+    """SERVER RESPONCE CREATION"""
 
-    ##CHECK CORRECT##
+    serverResponce = render(
+        request,
+        'app/question.html',
 
-    previousCorrect = request.POST.get("correctOption",default=None)
-    previousAnswer = request.POST.get("answer",default=None)
+        context_instance=RequestContext(
+            request,
+            {
+                'title': 'Quiz',
+                'imgNum': str(answer.imgNumber),
+                'year': datetime.now().year,
+                'op1': op[0].name[:-3],
+                'op2': op[1].name[:-3],
+                'op3': op[2].name[:-3],
+                'op4': op[3].name[:-3],
+                'op5': op[4].name[:-3],
+
+                'numQuestion': int(request.GET.get("q", default=1)),
+
+                'correctOption': correctOption,
+                'correctImgId': answer.imgNumber,
+
+                'previousCorrectDebug': previousCorrect,
+                'previousAnswerDebug': request.POST.get("answer", default=None),
+                'previousPersonId': request.POST.get("correctImgId", default=None),
+
+                'version': "1.0"
+
+            }))
+
+
+    """COOKIE STUFF"""
+
+    ## if the cookie does not exist, create one
+    if not "playerNumCorrect" in request.COOKIES or request.GET.get("q",default=0) == 0:
+        serverResponce.set_cookie("playerNumCorrect",value=0)
+
+
+
+
+    """MAIN STUFF"""
 
     if previousCorrect != None and previousAnswer !=None:
         previousCorrect = "op" + str(int(request.POST.get("correctOption", default=None)) + 1)
         previousAnswer = request.POST.get("answer", default=None)
+
+        p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId", default=None))
+
         if previousCorrect == previousAnswer:
             print("LAST QUESTION WAS CORRECT")
-            p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId",default=None))
             p.numCorrect += 1
             p.save()
             print(str(p.name) + "Now has " + str(p.numCorrect))
+            currentPlayerNumCorrect = int(request.COOKIES["playerNumCorrect"])
+            serverResponce.set_cookie("playerNumCorrect",int(currentPlayerNumCorrect)+1)
+            currentPlayerNumCorrect +=1
         else:
             print("LAST QUESTION WAS INCORRECT")
+            p.numIncorrect +=1
+            print(str(p.name) + "Now has " + str(p.numIncorrect) + " Incorrect")
+            p.save()
+            currentPlayerNumCorrect = request.COOKIES["playerNumCorrect"]
 
 
-    if int(request.GET.get("q", default=1)) < 10:
-        return render(
-            request,
-            'app/question.html',
 
-            context_instance=RequestContext(
-                request,
-                {
-                    'title': 'Quiz',
-                    'imgNum': str(answer.imgNumber),
-                    'year': datetime.now().year,
-                    'op1': op[0].name[:-3],
-                    'op2': op[1].name[:-3],
-                    'op3': op[2].name[:-3],
-                    'op4': op[3].name[:-3],
-                    'op5': op[4].name[:-3],
+    if int(request.GET.get("q", default=1)) < 25+1:
+        return serverResponce
 
-                    'numQuestion': int(request.GET.get("q", default=1)),
-
-                    'correctOption': correctOption,
-                    'correctImgId': answer.imgNumber,
-
-                    'previousCorrectDebug':previousCorrect,
-                    'previousAnswerDebug':request.POST.get("answer",default=None),
-                    'previousPersonId':request.POST.get("correctImgId",default=None),
-
-                    'version': "1.0"
-
-                }))
     else:
 
-        percent = 100
+        """CALCULATE PERCENT CORRECT"""
 
-        return render(
+        totalPlayed = 25
+        percent = (currentPlayerNumCorrect/totalPlayed)*100
+
+        """DEFINE SERVER RESPONCE"""
+
+        serverResultsResponce = render(
             request,
             'app/results.html',
 
@@ -152,10 +187,15 @@ def test(request):
                 request,
                 {
                     'title': 'Results',
-                    'numCorrect': 23,
-                    'numAnswered': 25,
+                    'numCorrect': currentPlayerNumCorrect,
+                    'numAnswered': totalPlayed,
                     'percentColor': getColor(percent),
                     'percentScore': percent,
                     'version': "1.0"
 
                 }))
+
+        """DELETE COOKIES"""
+        serverResultsResponce.delete_cookie("playerNumCorrect")
+
+        return serverResultsResponce
