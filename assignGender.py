@@ -20,3 +20,12 @@ for i in Person.objects.filter(isMale=-1):
     print("===================")
 
 
+for i in Person.objects.all():
+    s = i.name
+    #print(s)
+    try:
+        print('<option value="' + str(i.imgNumber) + '">' + s[s.find('"'):].replace('"','') + '</option.')
+    except:
+        real = None
+    print('<option value="' + str(i.imgNumber) + '">' + s + '</option.')
+    print('<option value="' + str(i.imgNumber) + '">' + (s[:-4])[(s[:-4]).rfind(' ')+1:] + ', ' + s[:(s[:-4]).rfind(' ')+1] + '</option.')

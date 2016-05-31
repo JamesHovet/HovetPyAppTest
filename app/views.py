@@ -80,6 +80,8 @@ def getColor(n):
 def test(request):
     """Renders the question page"""
 
+    # TODO: Change value to imgNumber and label to names
+
     answer = getOptions.getRandomRecord()
 
     op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(8)]
@@ -98,8 +100,9 @@ def test(request):
 
     """CHECK CORRECT"""
 
-    previousCorrect = request.POST.get("correctOption", default=None)
-    previousAnswer = request.POST.get("answer", default=None)
+    previousAnswer = request.POST.get("hiddenInput", default=None)
+    previousCorrect = request.POST.get("correctImgId", default=None)
+
 
     assert isinstance(request, HttpRequest)
     """SERVER RESPONCE CREATION"""
@@ -144,10 +147,16 @@ def test(request):
 
 
     """MAIN STUFF"""
-
+    #print("HIDDEN VALUE IS:")
+    #print(request.POST.get("hiddenInput"))
+    print(previousCorrect, previousAnswer)
     if previousCorrect != None and previousAnswer !=None:
-        previousCorrect = "op" + str(int(request.POST.get("correctOption", default=None)) + 1)
-        previousAnswer = request.POST.get("answer", default=None)
+        #previousCorrect = "op" + str(int(request.POST.get("correctOption", default=None)) + 1)
+        #previousAnswer = request.POST.get("answer", default=None)
+
+        previousAnswer = request.POST.get("hiddenInput",default=None)
+        previousCorrect = request.POST.get("correctImgId",default=None)
+        print(previousCorrect, previousAnswer)
 
         p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId", default=None))
 

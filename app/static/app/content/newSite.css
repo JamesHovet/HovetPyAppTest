@@ -23,6 +23,17 @@ h1, h2, h3, h4, h5, h6 {
     color: #d9221c;
 }
 
+.instructions {
+    max-width: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    font-size: 4em;
+}
+
 .resultsDiv {
     display: block;
     margin-left: auto;

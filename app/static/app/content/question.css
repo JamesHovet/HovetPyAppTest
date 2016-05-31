@@ -18,6 +18,10 @@ h1, h2 {
     text-align: center;
 }
 
+input#answerInput {
+    width: 250px;
+}
+
 #ANSWERS {
     line-height: 1;
     width: 25%;
