@@ -187,7 +187,7 @@ def test(request):
         """CALCULATE PERCENT CORRECT"""
 
         totalPlayed = 25
-        percent = (int(currentPlayerNumCorrect)/(totalPlayed))*100
+        percent = (float(currentPlayerNumCorrect)/float(totalPlayed))*100.0
 
         """DEFINE SERVER RESPONCE"""
 
