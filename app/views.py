@@ -112,6 +112,7 @@ def test(request):
 
 
                 'numQuestion': int(request.GET.get("q", default=1)),
+                'correctOption':answer.name,
 
 
                 'correctImgId': answer.imgNumber,

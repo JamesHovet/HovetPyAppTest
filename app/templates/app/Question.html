@@ -20,9 +20,11 @@
         <h2>previousAnswerDebug: {{previousAnswerDebug}}</h2>
         <h2>previousPersonId (DEBUG): {{previousPersonId}}</h2>
         <h2>currentCorrectImgId (DEBUG): {{correctImgId}}</h2>
-        <h2>CurrentCorrectOption (DEBUG): {{correctOption}}</h2>
+		<h2>CurrentCorrectOption (DEBUG): {{correctOption}}</h2>
         <h2>getCurrentCookie (DEBUG): {{currentCookie}}</h2>
         -->
+
+
 
 
         <h2>Question {{numQuestion}} of 25</h2>
@@ -331,8 +333,8 @@
 	<option data-value="2899852">Libby Mary LLanso</option>
 	<option data-value="2899852">Olivia "Libby" Mary LLanso</option>
 	<option data-value="2899852">LLanso, Olivia "Libby" Mary</option>
-	<option data-value="3097162">ChristineBernard</option>
-	<option data-value="3097162">Christine "Christine"Bernard</option>
+	<option data-value="3097162">Christine Bernard</option>
+	<option data-value="3097162">Christine "Christine" Bernard</option>
 	<option data-value="3097162">Bernard, Christine</option>
 	<option data-value="3097132">Elle Marie Santry</option>
 	<option data-value="3097132">Noelle "Elle" Marie Santry</option>
@@ -439,8 +441,8 @@
 	<option data-value="3420291">Brent William Gorton</option>
 	<option data-value="3420291">Brent "Brent" William Gorton</option>
 	<option data-value="3420291">Gorton, Brent "Brent" William</option>
-	<option data-value="2899829">6</option>
-	<option data-value="2899829">Ms. Sashni-Cole Matthews</option>
+	<option data-value="2899829">Cole-Matthews, Sashni</option>
+	<option data-value="2899829">Sashni-Cole Matthews</option>
 	<option data-value="2899829">Matthews, Ms. Sashni-Cole</option>
 	<option data-value="3257312">JamieJiang</option>
 	<option data-value="3257312">Jamie "Jamie"Jiang</option>
@@ -1085,16 +1087,51 @@
         </form>
 		<script>
 
-	function instructionsToggle() {
-    	var e = document.getElementById('instructions');
-    	if (e.style.display === 'block'){
-			e.style.display = 'none';
-    	} else {
-    		e.style.display = 'block';
- 		}
- 	}
+			function instructionsToggle() {
+				var e = document.getElementById('instructions');
+				if (e.style.display === 'block'){
+					e.style.display = 'none';
+				} else {
+					e.style.display = 'block';
+				}
+			}
 
-	</script>
+		</script>
+		<script>
+			setTimeout(function (){
+
+				document.getElementById("submitButton").disabled = false;
+
+			}, 1000);
+		</script>
+
+		<script>
+			// Find all inputs on the DOM which are bound to a datalist via their list attribute.
+			var inputs = document.querySelectorAll('input[list]');
+			for (var i = 0; i < inputs.length; i++) {
+			  // When the value of the input changes...
+			  inputs[i].addEventListener('change', function() {
+				var optionFound = false,
+				  datalist = this.list;
+
+
+				// Determine whether an option exists with the current value of the input.
+				for (var j = 0; j < datalist.options.length; j++) {
+					if (this.value == datalist.options[j].innerText || this.value == '' || this.value == ' ') {
+						optionFound = true;
+						break;
+					}
+				}
+				// use the setCustomValidity function of the Validation API
+				// to provide an user feedback if the value does not exist in the datalist
+				if (optionFound) {
+				  this.setCustomValidity('');
+				} else {
+				  this.setCustomValidity('Please select a valid value or leave blank');
+				}
+			  });
+			}
+		</script>
 
 	<h3><a href="javascript:instructionsToggle()">Show the instructions:</a></h3>
     </div>
@@ -1106,7 +1143,7 @@
 		<h4>Start typing in the name of the image you see. You can use first name, last name, or the person's nickname (according to the directory)</h4>
 		<h4>Select the correct name from the drop down menu. If there are identical options, both work</h4>
 		<h4>You can use the arrow keys to select from the menu, and the enter key to submit</h4>
-		<h4>If you do not know the answer, submit a guess</h4>
+		<h4>If you do not know the answer, leave the box blank, and press sumbit</h4>
 		<h4>Report any bugs to: <a href="mailto:jhovet18@groton.org">jhovet18@groton.org</a></h4>
 </div>
 </body>
