@@ -80,9 +80,15 @@ def getColor(n):
 def test(request):
     """Renders the question page"""
 
-    # TODO: Change value to imgNumber and label to names
-
     answer = getOptions.getRandomRecord()
+
+    if "alreadyUsed" in request.COOKIES:
+        alreadyUsedList = request.COOKIES["alreadyUsed"].split(',')
+        print(alreadyUsedList)
+        print(answer.imgNumber)
+        while str(answer.imgNumber) in alreadyUsedList:
+            answer = getOptions.getRandomRecord()
+
 
     """CHECK CORRECT"""
 
@@ -127,6 +133,9 @@ def test(request):
     if not "playerNumCorrect" in request.COOKIES or request.GET.get("q",default=0) == 0:
         serverResponce.set_cookie("playerNumCorrect",value=0)
 
+    if not "alreadyUsed" in request.COOKIES or request.GET.get("q", default=0) == 0:
+        serverResponce.set_cookie("alreadyUsed", value="")
+
 
 
 
@@ -141,8 +150,6 @@ def test(request):
         previousAnswer = request.POST.get("answer",default=None)
         previousCorrect = request.POST.get("correctImgId",default=None)
         print(type(previousCorrect), type(previousAnswer))
-
-        #TODO: FIX ABOVE
 
         print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
 
@@ -162,6 +169,8 @@ def test(request):
             print(str(p.name) + "Now has " + str(p.numIncorrect) + " Incorrect")
             p.save()
             currentPlayerNumCorrect = request.COOKIES["playerNumCorrect"]
+
+        serverResponce.set_cookie("alreadyUsed", value=request.COOKIES["alreadyUsed"] + str(answer.imgNumber) + ',')
 
 
 
