@@ -67,10 +67,10 @@ def about(request):
 ##THIS IS MY FUNCTION##
 
 def getColor(n):
-    if n > 89:
+    if n > 80:
         return "green"
 
-    elif n > 79:
+    elif n > 70:
         return "orange"
 
     else:
@@ -83,20 +83,6 @@ def test(request):
     # TODO: Change value to imgNumber and label to names
 
     answer = getOptions.getRandomRecord()
-
-    op = [app.models.Person.objects.filter(form=answer.form, isMale=answer.isMale).order_by('?')[i] for i in range(8)]
-
-    if answer.form != "20":
-        op = list(set(op))
-
-    if answer in op:
-        op.remove(answer)
-
-
-
-    correctOption = random.randrange(0, 5)
-
-    op[correctOption] = answer
 
     """CHECK CORRECT"""
 
@@ -121,7 +107,7 @@ def test(request):
 
                 'numQuestion': int(request.GET.get("q", default=1)),
 
-                'correctOption': correctOption,
+
                 'correctImgId': answer.imgNumber,
 
                 'previousCorrectDebug': previousCorrect,

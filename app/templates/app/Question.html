@@ -2,7 +2,9 @@
     {% load staticfiles %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--<link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />-->
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/question.css' %}"/>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'app/content/newSite.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'app/content/question.css' %}"/>
 
 
 
@@ -1042,7 +1044,20 @@
 
 
 
-                <script>
+
+
+            </div>
+
+            <br>
+
+			<!-- TODO: FIX SUMBIT BUTTON WITH NO TEXT -->
+
+            <button disabled id="submitButton" type="submit">SUBMIT</button>
+
+            <input type="hidden" name="correctOption" value="{{correctOption}}">
+            <input type="hidden" name="correctImgId" value="{{correctImgId}}">
+
+			<script>
                 document.querySelector('input[list]').addEventListener('input', function(e) {
 					var input = e.target,
 						list = input.getAttribute('list'),
@@ -1050,7 +1065,9 @@
 						hiddenInput = document.getElementById(input.id + '-hidden'),
 						inputValue = input.value;
 
+
 					hiddenInput.value = inputValue;
+					document.getElementById("submitButton").disabled = false;
 
 					for(var i = 0; i < options.length; i++) {
 						var option = options[i];
@@ -1065,17 +1082,33 @@
 
                 </script>
 
-            </div>
-
-            <br>
-
-            <button type="submit">SUBMIT</button>
-
-            <input type="hidden" name="correctOption" value="{{correctOption}}">
-            <input type="hidden" name="correctImgId" value="{{correctImgId}}">
-
         </form>
+		<script>
+
+	function instructionsToggle() {
+    	var e = document.getElementById('instructions');
+    	if (e.style.display === 'block'){
+			e.style.display = 'none';
+    	} else {
+    		e.style.display = 'block';
+ 		}
+ 	}
+
+	</script>
+
+	<h3><a href="javascript:instructionsToggle()">Show the instructions:</a></h3>
     </div>
+
+
+
+	<div hidden id="instructions" class="instructions">
+        <h4 class="important">YOU NEED A LAPTOP TO PLAY</h4>
+		<h4>Start typing in the name of the image you see. You can use first name, last name, or the person's nickname (according to the directory)</h4>
+		<h4>Select the correct name from the drop down menu. If there are identical options, both work</h4>
+		<h4>You can use the arrow keys to select from the menu, and the enter key to submit</h4>
+		<h4>If you do not know the answer, submit a guess</h4>
+		<h4>Report any bugs to: <a href="mailto:jhovet18@groton.org">jhovet18@groton.org</a></h4>
+</div>
 </body>
 
 
