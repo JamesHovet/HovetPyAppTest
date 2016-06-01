@@ -100,7 +100,7 @@ def test(request):
 
     """CHECK CORRECT"""
 
-    previousAnswer = request.POST.get("hiddenInput", default=None)
+    previousAnswer = request.POST.get("answer", default=None)
     previousCorrect = request.POST.get("correctImgId", default=None)
 
 
@@ -116,12 +116,8 @@ def test(request):
             {
                 'title': 'Quiz',
                 'imgNum': str(answer.imgNumber),
-                'year': datetime.now().year,
-                'op1': op[0].name[:-3],
-                'op2': op[1].name[:-3],
-                'op3': op[2].name[:-3],
-                'op4': op[3].name[:-3],
-                'op5': op[4].name[:-3],
+
+
 
                 'numQuestion': int(request.GET.get("q", default=1)),
 
@@ -132,7 +128,9 @@ def test(request):
                 'previousAnswerDebug': request.POST.get("answer", default=None),
                 'previousPersonId': request.POST.get("correctImgId", default=None),
 
-                'version': "1.0"
+                'version': "1.0",
+
+
 
             }))
 
@@ -148,15 +146,19 @@ def test(request):
 
     """MAIN STUFF"""
     #print("HIDDEN VALUE IS:")
-    #print(request.POST.get("hiddenInput"))
+    #print(request.POST.get("answer"))
     print(previousCorrect, previousAnswer)
     if previousCorrect != None and previousAnswer !=None:
         #previousCorrect = "op" + str(int(request.POST.get("correctOption", default=None)) + 1)
         #previousAnswer = request.POST.get("answer", default=None)
 
-        previousAnswer = request.POST.get("hiddenInput",default=None)
+        previousAnswer = request.POST.get("answer",default=None)
         previousCorrect = request.POST.get("correctImgId",default=None)
-        print(previousCorrect, previousAnswer)
+        print(type(previousCorrect), type(previousAnswer))
+
+        #TODO: FIX ABOVE
+
+        print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
 
         p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId", default=None))
 
@@ -166,7 +168,7 @@ def test(request):
             p.save()
             print(str(p.name) + "Now has " + str(p.numCorrect))
             currentPlayerNumCorrect = int(request.COOKIES["playerNumCorrect"])
-            serverResponce.set_cookie("playerNumCorrect",int(currentPlayerNumCorrect)+1)
+            serverResponce.set_cookie("playerNumCorrect", value=currentPlayerNumCorrect+1)
             currentPlayerNumCorrect +=1
         else:
             print("LAST QUESTION WAS INCORRECT")

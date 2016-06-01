@@ -23,6 +23,14 @@ h1, h2, h3, h4, h5, h6 {
     color: #d9221c;
 }
 
+h4.important {
+    color: red;
+}
+
+.questionBody {
+    margin-top: 30px;
+}
+
 .instructions {
     max-width: 800px;
     display: block;
