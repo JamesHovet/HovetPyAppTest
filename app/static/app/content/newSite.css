@@ -38,6 +38,17 @@ h4.important {
     margin-right: auto;
 }
 
+.resultsImg {
+    width: 150px;
+    margin-top: 15px;
+}
+
+.resultsLabel {
+    margin-bottom: 25px;
+    text-align: left;
+    margin-left: 20px;
+}
+
 .title {
     font-size: 4em;
 }

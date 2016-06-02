@@ -1,4 +1,5 @@
 {% extends "app/newlayout.html" %}
+{% load staticfiles %}
 
 <head>
     <title>{{title}}</title>
@@ -12,13 +13,27 @@
     <h3>Correct Responces: <p>{{numCorrect}}</p></h3>
     <h3>Total Responces: <p>{{numAnswered}}</p></h3>
     <br>
-    <h3>Final Score: <p class="{{percentColor}}">{{percentScore}}%</p></h3>
+    <h2>Final Score: <p class="{{percentColor}}">{{percentScore}}%</p></h2>
     <br>
     <h3><a href="/test/">Take the test again</a></h3>
 
+    <br>
+
+    <h2>Incorrect Answers:</h2>
+
+    <br>
+
+    <table>
+	{% for item in list %}
+        <tr>
+            <td><img class="resultsImg" src="{% static "app/img/"|add:item.imgNumber|add:".jpg" %}"></td>
+            <td><h4 class="resultsLabel">{{item.name}}</h4></td>
+        </tr>
+    {% endfor %}
+	</table>
+    <br>
+
 </div>
 
-<footer>
-    <h5>Version: <small>{{version}}</small></h5>
-</footer>
+
 {% endblock %}

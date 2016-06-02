@@ -125,6 +125,7 @@ def test(request):
 
 
 
+
             }))
 
 
@@ -136,6 +137,9 @@ def test(request):
 
     if not "alreadyUsed" in request.COOKIES or request.GET.get("q", default=0) == 0:
         serverResponce.set_cookie("alreadyUsed", value="")
+
+    if not "incorrectAnswers" in request.COOKIES or request.GET.get("q",default=0) == 0:
+        serverResponce.set_cookie("incorrectAnswers", value="")
 
 
 
@@ -170,6 +174,7 @@ def test(request):
             print(str(p.name) + "Now has " + str(p.numIncorrect) + " Incorrect")
             p.save()
             currentPlayerNumCorrect = request.COOKIES["playerNumCorrect"]
+            serverResponce.set_cookie("incorrectAnswers", value=request.COOKIES["incorrectAnswers"] + str(p.imgNumber) + ',')
 
         serverResponce.set_cookie("alreadyUsed", value=request.COOKIES["alreadyUsed"] + str(answer.imgNumber) + ',')
 
@@ -187,6 +192,11 @@ def test(request):
 
         """DEFINE SERVER RESPONCE"""
 
+        list = [app.models.Person.objects.get(imgNumber=request.COOKIES['incorrectAnswers'].split(',')[i]) for i in
+         range(len(request.COOKIES['incorrectAnswers'].split(',')) - 1)]
+        for i in list:
+            i.imgNumber = str(i.imgNumber)
+
         serverResultsResponce = render(
             request,
             'app/results.html',
@@ -199,7 +209,9 @@ def test(request):
                     'numAnswered': totalPlayed,
                     'percentColor': getColor(percent),
                     'percentScore': percent,
-                    'version': "1.0"
+                    'version': "1.0",
+                    'list': list
+
 
                 }))
 
