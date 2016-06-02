@@ -15,7 +15,13 @@
 
 <body>
     <div class=questionBody>
-        <!--
+
+
+
+		<!--
+
+		DEBUG OPTIONS/DATA:
+
         <h2>previousCorrectDebug: {{previousCorrectDebug}}</h2>
         <h2>previousAnswerDebug: {{previousAnswerDebug}}</h2>
         <h2>previousPersonId (DEBUG): {{previousPersonId}}</h2>
@@ -36,12 +42,16 @@
             <div id="ANSWERS">
 
 				<!--
-                <label><input type="radio" id="choice1" name="answer" value="op1"> {{op1}}</label><br><br>
-                <label><input type="radio" id="choice2" name="answer" value="op2"> {{op2}}</label><br><br>
-                <label><input type="radio" id="choice3" name="answer" value="op3"> {{op3}}</label><br><br>
-                <label><input type="radio" id="choice4" name="answer" value="op4"> {{op4}}</label><br><br>
-                <label><input type="radio" id="choice5" name="answer" value="op5"> {{op5}}</label><br><br>
+
+				the input is the actual typing area
+
+				the datalist is where we get the data from. the data-value attribute is where I store the imgId.
+				I kept this separate so that I could have multiple names for the same person, including last name
+
+				the last input is for the packet sent to the server to know what imgNumber was sent. this is set using a script that takes the name as an imput and gives the number as the output
+
 				-->
+
                 <input autofocus list="suggestionList" id="answerInput">
 
                 <datalist id="suggestionList">
@@ -1052,12 +1062,22 @@
 
             <br>
 
-			<!-- TODO: FIX SUMBIT BUTTON WITH NO TEXT -->
+			<!--
+
+			I disable the submit button initially, then, using javascript, enable it back with code after one second
+			this is so that there is not accidental repeated presses
+
+			-->
 
             <button disabled id="submitButton" type="submit">SUBMIT</button>
 
             <input type="hidden" name="correctOption" value="{{correctOption}}">
             <input type="hidden" name="correctImgId" value="{{correctImgId}}">
+
+			<!--
+			This is the script that sets the hidden value based on the datalist innerText.
+
+			-->
 
 			<script>
                 document.querySelector('input[list]').addEventListener('input', function(e) {
@@ -1085,6 +1105,11 @@
                 </script>
 
         </form>
+
+		<!--
+		This is the script that toggles the instructions on and off when the user presses the button
+		-->
+
 		<script>
 
 			function instructionsToggle() {
@@ -1097,6 +1122,13 @@
 			}
 
 		</script>
+
+		<!--
+
+		this is the script that enables the button after one second
+
+		-->
+
 		<script>
 			setTimeout(function (){
 
@@ -1104,6 +1136,10 @@
 
 			}, 1000);
 		</script>
+
+		<!--
+			this is a script that checks validity of the input, so that the user either inputs nothing (blank or one space) or a valid entry
+		-->
 
 		<script>
 			// Find all inputs on the DOM which are bound to a datalist via their list attribute.

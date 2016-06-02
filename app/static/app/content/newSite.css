@@ -1,3 +1,8 @@
+
+/***************************
+general css to start
+***************************/
+
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -11,6 +16,10 @@ h1, h2, h3, h4, h5, h6 {
     display: inline;
 }
 
+/***************************
+These are for the colored percent score, which one is used is decided server-side
+***************************/
+
 .green {
     color: #17d402;
 }
@@ -22,6 +31,10 @@ h1, h2, h3, h4, h5, h6 {
 .red {
     color: #d9221c;
 }
+
+/***************************
+for the warning that you need a laptop to play
+***************************/
 
 h4.important {
     color: red;
@@ -62,9 +75,3 @@ h4.important {
     height: 400px;
 }
 
-footer {
-    position:absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}

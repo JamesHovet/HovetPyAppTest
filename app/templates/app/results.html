@@ -13,6 +13,11 @@
     <h3>Correct Responces: <p>{{numCorrect}}</p></h3>
     <h3>Total Responces: <p>{{numAnswered}}</p></h3>
     <br>
+
+    <!--
+    here is where the color gets decided based off of server logic
+	-->
+
     <h2>Final Score: <p class="{{percentColor}}">{{percentScore}}%</p></h2>
     <br>
     <h3><a href="/test/">Take the test again</a></h3>
@@ -22,6 +27,11 @@
     <h2>Incorrect Answers:</h2>
 
     <br>
+
+    <!--
+		this is the table that gets filled with all of the incorrect img's and names based off of the cookie that is stored by the browser
+		this foreach logic is part of django
+		-->
 
     <table>
 	{% for item in list %}

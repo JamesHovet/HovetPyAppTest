@@ -14,7 +14,7 @@ img {
     max-width: 70%;
 }
 
-h1, h2 {
+hh2 {
     text-align: center;
 }
 
@@ -58,6 +58,10 @@ input {
 h1, h2, h3, h4, h5, h6, a {
     text-align: center;
 }
+
+/***************************
+this overrides the previous h4.important so that there is not a distracting red h4 in the question's instructions
+***************************/
 
 h4.important {
     color: black;

@@ -30,40 +30,6 @@ def home(request):
     )
 
 
-def contact(request):
-    """Renders the contact page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/contact.html',
-        context_instance=RequestContext(
-            request,
-            {
-                'title': 'Contact',
-                'message': 'Your contact page.',
-                'year': datetime.now().year,
-                'version': "1.0"
-            })
-    )
-
-
-def about(request):
-    """Renders the about page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/about.html',
-        context_instance=RequestContext(
-            request,
-            {
-                'title': 'About',
-                'message': 'Your application description page.',
-                'year': datetime.now().year,
-                'version': "1.0"
-            })
-    )
-
-
 ##THIS IS MY FUNCTION##
 
 def getColor(n):
@@ -80,21 +46,45 @@ def getColor(n):
 def test(request):
     """Renders the question page"""
 
-    answer = getOptions.getRandomRecord()
+    # gets the img to be used from the database by getting the first in a random arrangemet of all items in the db
+
+    answer = app.models.Person.objects.order_by('?').first()
+
+    # this is not perfect for a few reasons, but I tried to remove duplicates, and it works almost always
 
     if "alreadyUsed" in request.COOKIES:
         alreadyUsedList = request.COOKIES["alreadyUsed"].split(',')
         print(alreadyUsedList)
         print(answer.imgNumber)
         while str(answer.imgNumber) in alreadyUsedList:
-            answer = getOptions.getRandomRecord()
+            answer = app.models.Person.objects.order_by('?').first()
 
 
     """CHECK CORRECT"""
 
+    # this assigns the last answer and the last correct value to a variable. this is done here because I am lazy and did not do this properly
+
     previousAnswer = request.POST.get("answer", default=None)
     previousCorrect = request.POST.get("correctImgId", default=None)
 
+
+    # this is defining the responce that the server will send to the user
+
+    """
+    The values that I send to the user:
+
+    title: the title that appears in the browser
+    imgNum: the location of the file of the image on the server's disk
+
+    numQuestion: question x out of 25
+    correctOption: this is a debug bit that says what the actual answer is
+
+    correctImgId: redundant, but I used it for debug
+
+    the rest are debug things
+
+
+    """
 
     assert isinstance(request, HttpRequest)
     """SERVER RESPONCE CREATION"""
@@ -131,7 +121,8 @@ def test(request):
 
     """COOKIE STUFF"""
 
-    ## if the cookie does not exist, create one
+    ## if the cookie does not exist, create one, for all of the three cookies that I used
+    ## it also wipes the cookies if you are starting a new quiz, even if you do not finish the last one
     if not "playerNumCorrect" in request.COOKIES or request.GET.get("q",default=0) == 0:
         serverResponce.set_cookie("playerNumCorrect",value=0)
 
@@ -145,23 +136,19 @@ def test(request):
 
 
     """MAIN STUFF"""
-    #print("HIDDEN VALUE IS:")
-    #print(request.POST.get("answer"))
+
     print(previousCorrect, previousAnswer)
     if previousCorrect != None and previousAnswer !=None:
-        #previousCorrect = "op" + str(int(request.POST.get("correctOption", default=None)) + 1)
-        #previousAnswer = request.POST.get("answer", default=None)
 
-        previousAnswer = request.POST.get("answer",default=None)
-        previousCorrect = request.POST.get("correctImgId",default=None)
-        print(type(previousCorrect), type(previousAnswer))
+        # debug print to server console:
+        #print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
 
-        print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
 
+        # assign the person variable that we will use for the responce just submitted, this is based off of the hidden input slot in the previous HTML page
         p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId", default=None))
 
         if previousCorrect == previousAnswer:
-            print("LAST QUESTION WAS CORRECT")
+            #print("LAST QUESTION WAS CORRECT")
             p.numCorrect += 1
             p.save()
             print(str(p.name) + "Now has " + str(p.numCorrect))
@@ -176,9 +163,13 @@ def test(request):
             currentPlayerNumCorrect = request.COOKIES["playerNumCorrect"]
             serverResponce.set_cookie("incorrectAnswers", value=request.COOKIES["incorrectAnswers"] + str(p.imgNumber) + ',')
 
+        # add that person to the list of already used
         serverResponce.set_cookie("alreadyUsed", value=request.COOKIES["alreadyUsed"] + str(answer.imgNumber) + ',')
 
 
+
+    # if this is less than the 26th question, return the main question page
+    # else: return the results page
 
     if int(request.GET.get("q", default=1)) < 25+1:
         return serverResponce
