@@ -7,10 +7,10 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 import app.models
-import random
+# import random
 
 from django.http import HttpResponse
-import getOptions
+# import getOptions
 
 
 def home(request):
@@ -30,7 +30,29 @@ def home(request):
     )
 
 
-##THIS IS MY FUNCTION##
+def secret(request):
+    assert isinstance(request, HttpRequest)
+
+    """PREPARE REQUEST"""
+    answer = app.models.Person.objects.order_by('?').first()
+
+    context = RequestContext(
+        request,
+        {
+            'title': 'Secret',
+            'imgNum': str(answer.imgNumber),
+
+        }
+    )
+
+    return render(
+        request,
+        'app/secret.html',
+        context_instance=context
+    )
+
+
+# THIS IS MY FUNCTION##
 
 def getColor(n):
     if n > 80:
@@ -46,11 +68,13 @@ def getColor(n):
 def test(request):
     """Renders the question page"""
 
-    # gets the img to be used from the database by getting the first in a random arrangemet of all items in the db
+    # gets the img to be used from the database by getting the first in a
+    # random arrangemet of all items in the db
 
     answer = app.models.Person.objects.order_by('?').first()
 
-    # this is not perfect for a few reasons, but I tried to remove duplicates, and it works almost always
+    # this is not perfect for a few reasons, but I tried to remove duplicates,
+    # and it works almost always
 
     if "alreadyUsed" in request.COOKIES:
         alreadyUsedList = request.COOKIES["alreadyUsed"].split(',')
@@ -59,14 +83,13 @@ def test(request):
         while str(answer.imgNumber) in alreadyUsedList:
             answer = app.models.Person.objects.order_by('?').first()
 
-
     """CHECK CORRECT"""
 
-    # this assigns the last answer and the last correct value to a variable. this is done here because I am lazy and did not do this properly
+    # this assigns the last answer and the last correct value to a variable.
+    # this is done here because I am lazy and did not do this properly
 
     previousAnswer = request.POST.get("answer", default=None)
     previousCorrect = request.POST.get("correctImgId", default=None)
-
 
     # this is defining the responce that the server will send to the user
 
@@ -102,7 +125,7 @@ def test(request):
 
 
                 'numQuestion': int(request.GET.get("q", default=1)),
-                'correctOption':answer.name,
+                'correctOption': answer.name,
 
 
                 'correctImgId': answer.imgNumber,
@@ -118,60 +141,60 @@ def test(request):
 
             }))
 
-
     """COOKIE STUFF"""
 
-    ## if the cookie does not exist, create one, for all of the three cookies that I used
-    ## it also wipes the cookies if you are starting a new quiz, even if you do not finish the last one
-    if not "playerNumCorrect" in request.COOKIES or request.GET.get("q",default=0) == 0:
-        serverResponce.set_cookie("playerNumCorrect",value=0)
+    # if the cookie does not exist, create one, for all of the three cookies that I used
+    # it also wipes the cookies if you are starting a new quiz, even if you do
+    # not finish the last one
+    if "playerNumCorrect" not in request.COOKIES or request.GET.get("q", default=0) == 0:
+        serverResponce.set_cookie("playerNumCorrect", value=0)
 
-    if not "alreadyUsed" in request.COOKIES or request.GET.get("q", default=0) == 0:
+    if "alreadyUsed" not in request.COOKIES or request.GET.get("q", default=0) == 0:
         serverResponce.set_cookie("alreadyUsed", value="")
 
-    if not "incorrectAnswers" in request.COOKIES or request.GET.get("q",default=0) == 0:
+    if "incorrectAnswers" not in request.COOKIES or request.GET.get("q", default=0) == 0:
         serverResponce.set_cookie("incorrectAnswers", value="")
-
-
-
 
     """MAIN STUFF"""
 
     print(previousCorrect, previousAnswer)
-    if previousCorrect != None and previousAnswer !=None:
+    if previousCorrect is not None and previousAnswer is not None:
 
         # debug print to server console:
-        #print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
+        # print(previousCorrect, previousAnswer, str(previousAnswer) == str(previousCorrect))
 
-
-        # assign the person variable that we will use for the responce just submitted, this is based off of the hidden input slot in the previous HTML page
-        p = app.models.Person.objects.get(imgNumber=request.POST.get("correctImgId", default=None))
+        # assign the person variable that we will use for the responce just
+        # submitted, this is based off of the hidden input slot in the previous
+        # HTML page
+        p = app.models.Person.objects.get(
+            imgNumber=request.POST.get("correctImgId", default=None))
 
         if previousCorrect == previousAnswer:
-            #print("LAST QUESTION WAS CORRECT")
+            # print("LAST QUESTION WAS CORRECT")
             p.numCorrect += 1
             p.save()
             print(str(p.name) + "Now has " + str(p.numCorrect))
             currentPlayerNumCorrect = int(request.COOKIES["playerNumCorrect"])
-            serverResponce.set_cookie("playerNumCorrect", value=currentPlayerNumCorrect+1)
-            currentPlayerNumCorrect +=1
+            serverResponce.set_cookie(
+                "playerNumCorrect", value=currentPlayerNumCorrect + 1)
+            currentPlayerNumCorrect += 1
         else:
             print("LAST QUESTION WAS INCORRECT")
-            p.numIncorrect +=1
+            p.numIncorrect += 1
             print(str(p.name) + "Now has " + str(p.numIncorrect) + " Incorrect")
             p.save()
             currentPlayerNumCorrect = request.COOKIES["playerNumCorrect"]
-            serverResponce.set_cookie("incorrectAnswers", value=request.COOKIES["incorrectAnswers"] + str(p.imgNumber) + ',')
+            serverResponce.set_cookie("incorrectAnswers", value=request.COOKIES[
+                                      "incorrectAnswers"] + str(p.imgNumber) + ',')
 
         # add that person to the list of already used
-        serverResponce.set_cookie("alreadyUsed", value=request.COOKIES["alreadyUsed"] + str(answer.imgNumber) + ',')
-
-
+        serverResponce.set_cookie("alreadyUsed", value=request.COOKIES[
+                                  "alreadyUsed"] + str(answer.imgNumber) + ',')
 
     # if this is less than the 26th question, return the main question page
     # else: return the results page
 
-    if int(request.GET.get("q", default=1)) < 25+1:
+    if int(request.GET.get("q", default=1)) < 25 + 1:
         return serverResponce
 
     else:
@@ -179,12 +202,12 @@ def test(request):
         """CALCULATE PERCENT CORRECT"""
 
         totalPlayed = 25
-        percent = (float(currentPlayerNumCorrect)/float(totalPlayed))*100.0
+        percent = (float(currentPlayerNumCorrect) / float(totalPlayed)) * 100.0
 
         """DEFINE SERVER RESPONCE"""
 
         list = [app.models.Person.objects.get(imgNumber=request.COOKIES['incorrectAnswers'].split(',')[i]) for i in
-         range(len(request.COOKIES['incorrectAnswers'].split(',')) - 1)]
+                range(len(request.COOKIES['incorrectAnswers'].split(',')) - 1)]
         for i in list:
             i.imgNumber = str(i.imgNumber)
 
