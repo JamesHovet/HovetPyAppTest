@@ -55,13 +55,17 @@ h2 {
   background-color: #D5E5F4;
   color: #161A1C;
 }
+.playerLogin, .submit{
+    max-width: 400px;
+}
+
 </style>
 
 <h2>Type your own name:</h2>
 
 <form action="/test/" method="post">{% csrf_token %}
 
-    <select name="PlayerName" id="suggestionList" autofocus>
+    <select class="playerLogin" name="PlayerName" id="suggestionList" autofocus>
         <option data-value="null" value="null"></option>
         <option data-value="2988311" value="2988311">Abby 'Abby' Hannah Kong '17</option>
         <option data-value="2988311" value="2988311">Abby Kong</option>
@@ -948,12 +952,13 @@ h2 {
         <option data-value="3420323" value="3420323">Riya Malhotra</option>
     </select>
 
-    <input type="submit">
+    <input class="submit" type="submit">
 
 </form>
 
 <script>
 $('select').selectToAutocomplete();
+$('.ui-autocomplete-input').focus()
 </script>
 
 {% endblock %}

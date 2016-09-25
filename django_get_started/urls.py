@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^$', 'app.views.home', name='home'),
     url(r'^test', 'app.views.test', name='test'),
     url(r'^playerlogin', 'app.views.playerLogin', name='playerLogin'),
+    url(r'^leaderboard', 'app.views.leaderboard', name='leaderboard'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {

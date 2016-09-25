@@ -17,7 +17,10 @@ def home(request):
     """Renders the home page."""
 
     assert isinstance(request, HttpRequest)
-    return render(
+
+
+
+    homeResponce = render(
         request,
         'app/index.html',
         context_instance=RequestContext(
@@ -29,11 +32,20 @@ def home(request):
             })
     )
 
+    if 'playerID' in request.COOKIES:
+        homeResponce.delete_cookie('playerID')
+
+    return homeResponce
+
+
 
 def playerLogin(request):
     assert isinstance(request, HttpRequest)
 
     """PREPARE REQUEST"""
+
+
+
 
     context = RequestContext(
         request,
@@ -51,6 +63,36 @@ def playerLogin(request):
         context_instance=context
     )
 
+
+def leaderboard(request):
+    assert isinstance(request, HttpRequest)
+
+    print(app.models.Player.objects.all())
+
+    list = app.models.Player.objects.all().filter(QuestionsAnswered__gte=74).order_by('CorrectPercentage').reverse()
+
+    # list = ["one", "two", "three", "four"]
+
+    for i in range(len(list)):
+        list[i].Position = i + 1
+        list[i].ImgNumber = str(list[i].ImgNumber)
+        list[i].CorrectPercentage = str(list[i].CorrectPercentage*100)[:4] + "%"
+
+    context = RequestContext(
+        request,
+        {
+            'title': 'Leaderboard',
+            'list': list,
+        }
+    )
+
+    leaderboardRender = render(
+        request,
+        'app/leaderboard.html',
+        context_instance=context
+    )
+
+    return leaderboardRender
 
 # THIS IS MY FUNCTION##
 
@@ -72,7 +114,7 @@ def test(request):
     # random arrangemet of all items in the db
 
     lowestNumber = app.models.Person.objects.order_by('NumShown').first().NumShown
-    print("lowest:", lowestNumber)
+    # print("lowest:", lowestNumber)
 
     answer = app.models.Person.objects.order_by('?').filter(NumShown=lowestNumber).first()
     answer.NumShown += 1
@@ -163,10 +205,32 @@ def test(request):
     if "incorrectAnswers" not in request.COOKIES or request.GET.get("q", default=0) == 0:
         serverResponce.set_cookie("incorrectAnswers", value="")
 
-
-
     if "playerID" not in request.COOKIES:
         serverResponce.set_cookie("playerID", value=str(request.POST.get("PlayerName")))
+
+        """CREATE PLAYERID FOR NEW PLAYERS"""
+
+        try:
+            currentPlayer = app.models.Player.objects.get(ImgNumber=request.POST.get("PlayerName"))
+
+        except:
+            newPlayer = app.models.Player(ImgNumber=request.POST.get("PlayerName"),UserName=app.models.Person.objects.get(ImgNumber=request.POST.get("PlayerName")).UnformattedName)
+            print(newPlayer)
+            print(newPlayer.ImgNumber)
+
+            newPlayer.save()
+
+            currentPlayer = newPlayer
+    else:
+
+        """ACTIVATE PLAYER"""
+
+        currentPlayer = app.models.Player.objects.get(ImgNumber=request.COOKIES['playerID'])
+
+    # if app.models.Player.get(playerID=str(request.POST.get("PlayerName"))) == None:
+
+
+    print('currentPlayer', currentPlayer)
 
     """MAIN STUFF"""
 
@@ -199,8 +263,11 @@ def test(request):
             serverResponce.set_cookie(
                 "playerNumCorrect", value=currentPlayerNumCorrect + 1)
             currentPlayerNumCorrect += 1
+
+            currentPlayer.AnswersCorrect += 1
+
         else:
-            print("LAST QUESTION WAS INCORRECT")
+            # print("LAST QUESTION WAS INCORRECT")
             p.NumIncorrect += 1
             print(str(p.UnformattedName) + "Now has " + str(p.NumIncorrect) + " Incorrect")
             p.save()
@@ -208,9 +275,19 @@ def test(request):
             serverResponce.set_cookie("incorrectAnswers", value=request.COOKIES[
                                       "incorrectAnswers"] + str(p.ImgNumber) + ',')
 
+            currentPlayer.AnswersIncorrect += 1
+
         # add that person to the list of already used
         serverResponce.set_cookie("alreadyUsed", value=request.COOKIES[
                                   "alreadyUsed"] + str(answer.ImgNumber) + ',')
+
+
+
+        currentPlayer.QuestionsAnswered += 1
+
+        currentPlayer.CorrectPercentage = (currentPlayer.AnswersCorrect/currentPlayer.QuestionsAnswered)
+
+        currentPlayer.save()
 
     # if this is less than the 26th question, return the main question page
     # else: return the results page
@@ -229,9 +306,14 @@ def test(request):
 
         list = [app.models.Person.objects.get(ImgNumber=request.COOKIES['incorrectAnswers'].split(',')[i]) for i in
                 range(len(request.COOKIES['incorrectAnswers'].split(',')) - 1)]
+
+        print(list)
+
         for i in list:
             i.ImgNumber = str(i.ImgNumber)
             i.UnformattedName = i.UnformattedName.replace("\"", "")
+
+        print(list)
 
         serverResultsResponce = render(
             request,
@@ -246,7 +328,8 @@ def test(request):
                     'percentColor': getColor(percent),
                     'percentScore': percent,
                     'version': "1.0",
-                    'list': list
+                    'list': list,
+
 
 
                 }))

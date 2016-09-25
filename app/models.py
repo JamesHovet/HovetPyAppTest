@@ -29,3 +29,7 @@ class Player(models.Model):
     AnswersCorrect = models.IntegerField(default=0)
     AnswersIncorrect = models.IntegerField(default=0)
     ImgNumber = models.IntegerField(default=0)
+    CorrectPercentage = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return str(self.UserName)

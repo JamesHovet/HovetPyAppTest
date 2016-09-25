@@ -66,7 +66,6 @@
 
         <h2>Question {{numQuestion}} of 25</h2>
 
-
         <img src="{% static "app/img/"|add:imgNum|add:".jpg" %}">
         <br>
         <form action="/test/?q={{ numQuestion |add:1 }}" method="post">{% csrf_token %}
@@ -990,7 +989,7 @@
 			-->
 
             <button disabled id="submitButton" type="submit">SUBMIT</button>
-            <input type="submit" value="Submit">
+            
 
 
             <input type="hidden" name="correctOption" value="{{correctOption}}">
@@ -1003,7 +1002,7 @@
 
             <script>
                 $('select').selectToAutocomplete();
-                
+
                 $('.ui-autocomplete-input').focus()
             </script>
 

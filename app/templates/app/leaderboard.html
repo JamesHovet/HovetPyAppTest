@@ -1,0 +1,60 @@
+{% extends "app/newlayout.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<style>
+
+table {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+
+}
+
+.resultsNumber {
+    width: 30px;
+}
+
+</style>
+
+<h1>LEADERBOARD:</h1>
+
+<h3><a href="/">Back to home</a></h3>
+<h3><a href="/playerlogin">Play a round</a></h3>
+<h3 class="red">YOU NEED TO PLAY AT LEAST THREE ROUNDS TO GET ON THE LEADERBOARD</h3>
+
+
+<table>
+{% for item in list %}
+    <tr>
+        <td><h4 class="resultsNumber resultsLabel">{{item.Position}}</h4></td>
+        <td><img class="resultsImg" src="{% static "app/img/"|add:item.ImgNumber|add:".jpg" %}"></td>
+        <td><h4 class="resultsLabel">{{item.UserName}}</h4></td>
+        <td><h4 class="resultsPercentage resultsLabel">{{item.CorrectPercentage}}</h4></td>
+    </tr>
+{% endfor %}
+</table>
+
+<script>
+
+var percentages = document.getElementsByClassName('resultsPercentage');
+
+var applyPercentCSS = function applyPercentCSS(item) {
+    n = parseInt(item.innerHTML.substring(0,2))
+    if(n > 80){
+        item.className = "resultsPercentage resultsLabel green"
+    }else if(n > 70){
+        item.className = "resultsPercentage resultsLabel orange"
+    }else{
+        item.className = "resultsPercentage resultsLabel red"
+    }
+}
+
+for(var i = 0; i<percentages.length;i++){
+    applyPercentCSS(percentages[i])
+}
+
+</script>
+
+{% endblock %}
