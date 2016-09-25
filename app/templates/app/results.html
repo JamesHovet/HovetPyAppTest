@@ -36,8 +36,8 @@
     <table>
 	{% for item in list %}
         <tr>
-            <td><img class="resultsImg" src="{% static "app/img/"|add:item.imgNumber|add:".jpg" %}"></td>
-            <td><h4 class="resultsLabel">{{item.name}}</h4></td>
+            <td><img class="resultsImg" src="{% static "app/img/"|add:item.ImgNumber|add:".jpg" %}"></td>
+            <td><h4 class="resultsLabel">{{item.UnformattedName}}</h4></td>
         </tr>
     {% endfor %}
 	</table>

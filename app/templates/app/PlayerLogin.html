@@ -1,0 +1,34 @@
+{% extends "app/newlayout.html" %}
+
+{% block content %}
+
+
+
+<style>
+input {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    min-width: 200px;
+
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+</style>
+
+<h2>Login:</h2>
+
+<form action="/test/" method="post">{% csrf_token %}
+
+    <input id="user">
+    <input type="submit">
+
+</form>
+
+{% endblock %}
