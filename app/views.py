@@ -38,7 +38,7 @@ def playerLogin(request):
     context = RequestContext(
         request,
         {
-            'title': 'Secret',
+            'title': 'Player Login:',
 
         }
     )
@@ -163,12 +163,18 @@ def test(request):
     if "incorrectAnswers" not in request.COOKIES or request.GET.get("q", default=0) == 0:
         serverResponce.set_cookie("incorrectAnswers", value="")
 
+
+
+    if "playerID" not in request.COOKIES:
+        serverResponce.set_cookie("playerID", value=str(request.POST.get("PlayerName")))
+
     """MAIN STUFF"""
 
     print("peviousCorrect, previousAnswer: ", previousCorrect, previousAnswer)
 
     print("POST:" , request.POST)
     print("GET:" , request.GET)
+    print("COOKIES:", request.COOKIES)
 
     if previousCorrect is not None and previousAnswer is not None:
 

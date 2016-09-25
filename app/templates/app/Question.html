@@ -79,13 +79,13 @@
 				the datalist is where we get the data from. the data-value attribute is where I store the imgId.
 				I kept this separate so that I could have multiple names for the same person, including last name
 
-				the last input is for the packet sent to the server to know what imgNumber was sent. this is set using a script that takes the name as an imput and gives the number as the output
+				the last input is for the packet sent to the server to know what ImgNumber was sent. this is set using a script that takes the name as an imput and gives the number as the output
 
 				-->
 
                 <!-- <input autofocus list="suggestionList" id="answerInput"> -->
 
-                <select name="answer" id="suggestionList" autofocus="autofocus">
+                <select name="answer" id="suggestionList" autofocus>
                     <option data-value="null" value="null"></option>
                     <option data-value="2988311" value="2988311">Abby 'Abby' Hannah Kong '17</option>
                     <option data-value="2988311" value="2988311">Abby Kong</option>
@@ -1003,6 +1003,8 @@
 
             <script>
                 $('select').selectToAutocomplete();
+                
+                $('.ui-autocomplete-input').focus()
             </script>
 
         </form>
