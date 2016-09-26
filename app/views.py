@@ -169,25 +169,17 @@ def test(request):
         context_instance=RequestContext(
             request,
             {
+
                 'title': 'Quiz',
                 'imgNum': str(answer.ImgNumber),
 
-
-
                 'numQuestion': int(request.GET.get("q", default=1)),
-                'correctOption': answer.UnformattedName,
-
 
                 'correctImgId': answer.ImgNumber,
 
-                'previousCorrectDebug': previousCorrect,
-                'previousAnswerDebug': request.POST.get("answer", default=None),
                 'previousPersonId': request.POST.get("correctImgId", default=None),
 
                 'version': "1.0",
-
-
-
 
             }))
 
