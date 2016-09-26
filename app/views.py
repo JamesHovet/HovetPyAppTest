@@ -69,7 +69,7 @@ def leaderboard(request):
 
     print(app.models.Player.objects.all())
 
-    list = app.models.Player.objects.all().filter(QuestionsAnswered__gte=74).order_by('CorrectPercentage').reverse()
+    list = app.models.Player.objects.all().filter(QuestionsAnswered__gte=49).order_by('CorrectPercentage').reverse()
 
     # list = ["one", "two", "three", "four"]
 
